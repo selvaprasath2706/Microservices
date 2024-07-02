@@ -1,4 +1,4 @@
-FROM node:18.17.1-alpine as build-stage
+FROM node:18.18.0-alpine as build-stage
 
 WORKDIR /app
 
@@ -13,7 +13,7 @@ ENV VITE_LOGIN_SERVICE=http://localhost:3000/api/auth
 
 RUN npm run build
 
-FROM node:18.17.1-alpine as production-stage
+FROM node:18.18.0-alpine as production-stage
 
 WORKDIR /app
 
