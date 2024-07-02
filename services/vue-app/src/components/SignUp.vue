@@ -1,4 +1,3 @@
-
 <script setup lang="ts"></script>
 <template>
   <div class="flex justify-center items-center min-h-screen bg-gray-100">
@@ -10,7 +9,7 @@
           <input
             v-model="email"
             type="email"
-            class="w-f  ull px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
             required
           />
         </div>
@@ -35,32 +34,33 @@
 </template>
 
 <script>
-import axios from 'axios';
-
+import axios from 'axios'
+import { useToast } from 'vue-toastification'
+const toast = useToast()
 export default {
   data() {
     return {
       email: '',
-      password: '',
-    };
+      password: ''
+    }
   },
 
   methods: {
     submit() {
-     axios.post(import.meta.env.VITE_LOGIN_SERVICE+'/register', {
-        email: this.email,
-        password: this.password,
-      })
-      .then(() => {
-        console.log('Registration successful');
-        alert("Signup Successful")
-        this.$router.push('/login');
-      })
-      .catch(error => {
-        console.error('Registration error:', error);
-      });
-
-    },
-  },
-};
+      axios
+        .post(import.meta.env.VITE_LOGIN_SERVICE + '/register', {
+          email: this.email,
+          password: this.password
+        })
+        .then(() => {
+          toast.success('Registration successful')
+          this.$router.push('/login')
+        })
+        .catch((error) => {
+          console.error('Registration error:', error)
+          toast.error('Registration failed. Please try again')
+        })
+    }
+  }
+}
 </script>

@@ -3,7 +3,6 @@
   <div class="flex justify-center items-center min-h-screen bg-gray-100">
     <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
       <h2 class="text-2xl font-bold mb-6 text-center">Sign In</h2>
-      <button @click="callfn">Add 1</button>
       <form @submit.prevent="submit">
         <div class="mb-4">
           <label class="block text-gray-700">Email</label>
@@ -35,42 +34,44 @@
 </template>
 
 <script>
-import axios from 'axios';
- console.log("import.meta.env.VITE_LOGIN_SERVICE before", import.meta.env.VITE_LOGIN_SERVICE);
+import axios from 'axios'
+import { useToast } from 'vue-toastification'
+const toast = useToast()
 export default {
   data() {
     return {
       email: '',
-      password: '',
-    };
+      password: ''
+    }
   },
   methods: {
     submit() {
-      axios.post(import.meta.env.VITE_LOGIN_SERVICE + '/login', {
-        email: this.email,
-        password: this.password,
-      }
-        , {
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS"
-          }
-        })
-        .then((response) => {
-          console.log('Login successful');
-          localStorage.setItem('token', response.data.token);
-          localStorage.setItem('email', this.email);
-          this.$router.push('/');
-        })
-        .catch(error => {
-          console.error('Login error:', error);
-        });
-    },
-    callfn()
-            {
-            console.log("import.meta.env.VITE_LOGIN_SERVICE before", import.meta.env.VITE_LOGIN_SERVICE);
+      axios
+        .post(
+          import.meta.env.VITE_LOGIN_SERVICE + '/login',
+          {
+            email: this.email,
+            password: this.password
+          },
+          {
+            headers: {
+              'Access-Control-Allow-Origin': '*',
+              'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS'
             }
+          }
+        )
+        .then((response) => {
+          console.log('Login successful')
+          toast.success('Login successful')
+          localStorage.setItem('token', response.data.token)
+          localStorage.setItem('email', this.email)
+          this.$router.push('/')
+        })
+        .catch((error) => {
+          console.error('Login error:', error)
+          toast.error('Login failed. Please try again')
+        })
+    }
   }
-  
-};
+}
 </script>
