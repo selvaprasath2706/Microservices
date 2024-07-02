@@ -8,9 +8,6 @@ RUN npm install
 
 COPY . .
 
-ENV VITE_LOGIN_SERVICE=http://localhost:3000/api/auth
-
-
 RUN npm run build
 
 FROM node:18.18.0-alpine as production-stage

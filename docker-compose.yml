@@ -1,12 +1,12 @@
-version: "3.8"
+version: '3.8'
 
 services:
   mongo:
-   image: mongo:latest
-   container_name: mongodb
-   ports:
-    - "27017:27017"
-   environment:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - '27017:27017'
+    environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: rootPassword
   login-service:
@@ -18,10 +18,9 @@ services:
       - MONGO_URI=mongodb://root:rootPassword@mongo:27017/auth?authSource=admin
       - JWT_SECRET=secretKey
     ports:
-      - "3000:3000"
+      - '3000:3000'
     depends_on:
       - mongo
-    command: npm start
   vue-app:
     build:
       context: ./services/vue-app
@@ -29,5 +28,4 @@ services:
     environment:
       - VITE_LOGIN_SERVICE=http://localhost:3000/api/auth
     ports:
-      - "8080:8080"
-    
+      - '8080:8080'
