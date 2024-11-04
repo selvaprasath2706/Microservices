@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: login-service
+spec:
+  replicas: 2
+  selector:
+   matchLabels:
+    app: login-service
+  template:
+   metadata:
+    labels:
+     app: login-service
+   spec:
+    containers:
+     - image: selvaprasath27/login-service
+       name: login-service
+       ports:
+        - containerPort: 3000
+       env:
+        - name: PORT
+          value: "3000"
+        - name: MONGO_URI
+          value: "mongodb://root:rootPassword@mongo-service:27017/auth?authSource=admin"
+        - name: JWT_SECRET
+          value: "secretKey"

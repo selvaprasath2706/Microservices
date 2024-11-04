@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  login-service:
+    image: 'selvaprasath27/login-service'
+    ports:
+      - '3000:3000'
+    environment:
+      - PORT=3000
+      - MONGO_URI=mongodb://root:rootPassword@mongo-service:27017/auth?authSource=admin
+      - JWT_SECRET=secretKey
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+    networks:
+      - my-network
+
+  mongo-service:
+    image: mongo:latest
+    ports:
+      - '27017:27017'
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=rootPassword
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    networks:
+      - my-network
+
+  vue-app-service:
+    image: 'selvaprasath27/vue-app:latest'
+    ports:
+      - '8080:8080'
+    environment:
+      - VITE_LOGIN_SERVICE=http://login-service:3000/api/auth
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+    networks:
+      - my-network
+
+networks:
+  my-network:
+    driver: overlay
